@@ -20,46 +20,58 @@ namespace Taskmaster.Server.Controllers
         [Route("assignments")]
         public async Task <IActionResult> GetAssignments()
         {
-           List <Assignment> TasksCollections = await _dbcontext.Assignments.OrderByDescending(e => e.AssignmentID).ToListAsync();
-           return StatusCode(StatusCodes.Status100Continue);
+            try
+            {
+                List<Assignment> TasksCollections = await _dbcontext.Assignments.OrderByDescending(e => e.AssignmentId).ToListAsync();
+                return StatusCode(StatusCodes.Status200OK, TasksCollections);
+            }
+            catch (Exception error)
+            {
+
+                return StatusCode(StatusCodes.Status500InternalServerError, error);
+            }
         }
 
         [HttpGet]
-        [Route("assignments/{string: id}")]
+        [Route("edit")]
         public async Task<IActionResult> GetAssignmentById(string id)
         {
-            Assignment TaskById = _dbcontext.Assignments.Find(id);
-            if (TaskById != null)
+            Assignment assignment = await _dbcontext.Assignments.FindAsync(id);
+            if (assignment != null)
             {
-                return StatusCode(StatusCodes.Status200OK, TaskById);
+                return StatusCode(StatusCodes.Status200OK, assignment);
             }
             else
             {
                 return StatusCode(StatusCodes.Status404NotFound);
             }
-            //List<Assignment> TasksCollections = await _dbcontext.Assignments.OrderByDescending(e => e.AssignmentID).ToListAsync();
-            
         }
+
         [HttpPut]
         [Route("update")]
         public async Task <IActionResult> UpdateAssignment([FromBody] Assignment assignmentData)
         {
-            Assignment searchAssignment = await _dbcontext.Assignments.FindAsync(assignmentData.AssignmentID);
-            if (searchAssignment != null)
+            try
             {
-                _dbcontext.Assignments.Update(searchAssignment);
-                await _dbcontext.SaveChangesAsync();
-                return RedirectToAction("Index");
+                
+              
+                    _dbcontext.Assignments.Update(assignmentData);
+                    await _dbcontext.SaveChangesAsync();
+                return StatusCode(StatusCodes.Status200OK, assignmentData);
+
+
 
             }
-            else
+            catch (Exception error)
             {
-                return StatusCode(StatusCodes.Status404NotFound);
+
+                Console.WriteLine(error);
+                return StatusCode(StatusCodes.Status500InternalServerError, error);
             }
         }
 
         [HttpDelete]
-        [Route("delete/{string: id}")]
+        [Route("delete/edit")]
         public async Task<IActionResult> DeleteAssignment(string id)
         {
             Assignment searchAssignment = await _dbcontext.Assignments.FindAsync(id);
