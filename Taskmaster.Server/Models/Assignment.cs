@@ -5,7 +5,7 @@ namespace Taskmaster.Server.Models;
 
 public partial class Assignment
 {
-    public Guid? AssignmentID { get; set; }
+    public Guid AssignmentId { get; set; }
 
     public int? EmployeeAssigned { get; set; }
 
