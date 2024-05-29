@@ -15,16 +15,37 @@ public partial class TaskmasterContext : DbContext
     {
     }
 
-    public virtual DbSet<Employee> Employees { get; set; }
-
     public virtual DbSet<Assignment> Assignments { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=LAPTOP-6OGJ7LKA\\LEODEVELOP; DataBase=Taskmaster;TrustServerCertificate=true;Integrated Security=true");
+    public virtual DbSet<Employee> Employees { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Assignment>(entity =>
+        {
+            entity.HasKey(e => e.AssignmentId).HasName("PK__Assignme__32499E5700A5F880");
+
+            entity.Property(e => e.AssignmentId)
+                .HasDefaultValueSql("(newid())")
+                .HasColumnName("AssignmentID");
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("(CONVERT([date],getdate()))");
+            entity.Property(e => e.Description)
+                .HasMaxLength(500)
+                .IsUnicode(false);
+            entity.Property(e => e.Status)
+                .HasMaxLength(20)
+                .IsUnicode(false);
+            entity.Property(e => e.Title)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+
+            entity.HasOne(d => d.EmployeeAssignedNavigation).WithMany(p => p.Assignments)
+                .HasForeignKey(d => d.EmployeeAssigned)
+                .HasConstraintName("FK__Assignmen__Emplo__6FE99F9F");
+        });
+
         modelBuilder.Entity<Employee>(entity =>
         {
             entity.HasKey(e => e.EmployeeId).HasName("PK__Employee__7AD04FF170C9EEBE");
@@ -45,29 +66,6 @@ public partial class TaskmasterContext : DbContext
             entity.Property(e => e.Role)
                 .HasMaxLength(20)
                 .IsUnicode(false);
-        });
-
-        modelBuilder.Entity<Assignment>(entity =>
-        {
-            entity.HasNoKey();
-
-            entity.Property(e => e.CreatedAt).HasDefaultValueSql("(CONVERT([date],getdate()))");
-            entity.Property(e => e.Description)
-                .HasMaxLength(500)
-                .IsUnicode(false);
-            entity.Property(e => e.Status)
-                .HasMaxLength(20)
-                .IsUnicode(false);
-            entity.Property(e => e.AssignmentID)
-                .HasDefaultValueSql("(newid())")
-                .HasColumnName("AssignmentID");
-            entity.Property(e => e.Title)
-                .HasMaxLength(50)
-                .IsUnicode(false);
-
-            entity.HasOne(d => d.EmployeeAssignedNavigation).WithMany()
-                .HasForeignKey(d => d.EmployeeAssigned)
-                .HasConstraintName("FK__Tasks__EmployeeA__4BAC3F29");
         });
 
         OnModelCreatingPartial(modelBuilder);
