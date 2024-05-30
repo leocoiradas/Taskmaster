@@ -1,9 +1,20 @@
-import { Children } from "react";
+import React, { Suspense } from "react";
+import LoadingData from "./LoadingData";
+import { useState } from "react";
 
-function Dashboard() {
+function Dashboard({children, sectionName}) {
+  const [formData, setFormData] = useState({})
     return (
-      <section className="w-full h-full flex justify-center items-center p-3 gap-5">
-            {Children }
+      <section className="w-full max-h-[90dvh] flex flex-col justify-center items-center">
+        <article className="h-12 w-full text-3xl flex justify-center items-center font-semibold p-4 shadow-md">
+          <h3>{sectionName}</h3>
+        </article>
+          
+          <article className="w-full h-full flex flex-wrap justify-center items-center p-3 gap-6 overflow-y-scroll">
+            {children}
+          </article>
+          
+        
       </section>
   );
 }
