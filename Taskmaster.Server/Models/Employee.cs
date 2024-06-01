@@ -16,4 +16,6 @@ public partial class Employee
     public string Password { get; set; } = null!;
 
     public string Role { get; set; } = null!;
+
+    public virtual ICollection<Assignment> Assignments { get; set; } = new List<Assignment>();
 }
