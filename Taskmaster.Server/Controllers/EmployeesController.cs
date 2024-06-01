@@ -54,7 +54,7 @@ namespace Taskmaster.Server.Controllers
         }
 
         [HttpDelete]
-        [Route("delete/{int: id}")]
+        [Route("delete")]
         public async Task<IActionResult> Delete(int id)
         {
             Employee employee = _dbcontext.Employees.Find(id);
