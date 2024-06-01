@@ -1,12 +1,15 @@
 import { useEffect, useState } from 'react';
 import './App.css';
+import { router } from './router/router';
+import { Provider } from 'react-redux';
+import store from './Store/store';
+import { RouterProvider } from 'react-router-dom';
 
 function App() {
+    { /*
     const [forecasts, setForecasts] = useState();
 
-    useEffect(() => {
-        populateWeatherData();
-    }, []);
+    
 
     const contents = forecasts === undefined
         ? <p><em>Loading... Please refresh once the ASP.NET backend has started. See <a href="https://aka.ms/jspsintegrationreact">https://aka.ms/jspsintegrationreact</a> for more details.</em></p>
@@ -29,21 +32,29 @@ function App() {
                     </tr>
                 )}
             </tbody>
-        </table>;
+        </table>; */
+
+    }
 
     return (
         <div>
+            { /*
             <h1 id="tabelLabel">Weather forecast</h1>
             <p>This component demonstrates fetching data from the server.</p>
-            {contents}
+            {contents} */
+            }
+            <Provider store = {store} >
+                <RouterProvider router={router} />
+            </Provider>
         </div>
+            
     );
     
-    async function populateWeatherData() {
+    /*async function populateWeatherData() {
         const response = await fetch('weatherforecast');
         const data = await response.json();
         setForecasts(data);
-    }
+    }*/
 }
 
 export default App;
