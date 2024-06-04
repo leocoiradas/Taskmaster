@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Taskmaster.Server.DTO;
 using Taskmaster.Server.Models;
 
 namespace Taskmaster.Server.Controllers
@@ -21,8 +22,19 @@ namespace Taskmaster.Server.Controllers
         [Route("get")]
         public async Task <IActionResult> GetEmployees()
         {
-            List<Employee> Employees = await _dbcontext.Employees.OrderByDescending(e => e.EmployeeId).ToListAsync();
-            return StatusCode(StatusCodes.Status200OK, Employees);
+            /*List<Employee> Employees = await _dbcontext.Employees.OrderByDescending(e => e.EmployeeId).ToListAsync();*/
+            List<EmployeeDTO> employeesDTO = await _dbcontext.Employees
+             .Select(e => new EmployeeDTO
+                {
+                    EmployeeId = e.EmployeeId,
+                    Name = e.Name,
+                    LastName = e.LastName,
+                    Email = e.Email,
+                    Role = e.Role
+                })
+            
+            .ToListAsync();
+            return StatusCode(StatusCodes.Status200OK, employeesDTO);
         }
 
         [HttpPost]
