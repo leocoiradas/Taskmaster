@@ -4,10 +4,25 @@ import Button from "../Button";
 
 function EmployeesTable({ employeesArr }) {
   const [formVisibility, setFormVisibility] = useState(false);
+  const [formDetails, setFormDetails] = useState({
+    name: "",
+    lastName: "",
+    email: "",
+    role: ""
+  })
 
   const showForm = () => {
     setFormVisibility(!formVisibility)
-    console.log("boton")
+  }
+  const employeeFormDetails = (employeeDetails) => {
+    setFormDetails({
+      name: employeeDetails.name,
+      lastName: employeeDetails.lastName,
+      email: employeeDetails.email,
+      role: employeeDetails.role
+    })
+    console.log(formDetails)
+    setFormVisibility(!formVisibility)
   }
   return (
     <>
@@ -30,12 +45,12 @@ function EmployeesTable({ employeesArr }) {
               <td>{employee.lastName}</td>
               <td>{employee.email}</td>
               <td>{employee.role}</td>
-              <td><Button buttonName="Edit" buttonColor="blue" eventFunction={showForm} /></td>
-              <td>{formVisibility ? <EmployeeManagerForm employeeDetails={employee} closeForm={showForm}/> : null}</td>
+              <td><Button buttonName="Edit" buttonColor="blue" eventFunction={() => employeeFormDetails(employee)} /></td>
             </tr>
           ))}
         </tbody>
       </table>
+      {formVisibility ? <EmployeeManagerForm employeeDetails={formDetails} closeForm={showForm}/> : null}
     </>
   );
 }
