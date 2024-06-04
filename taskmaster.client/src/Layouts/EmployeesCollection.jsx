@@ -3,6 +3,7 @@ import EmployeesTable from "../Components/EmployeesComponents/EmployeesTable";
 import { Suspense, useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { getEmployees } from "../Store/Actions/EmployeesAction";
+import CreateEmployeeButton from "../Components/EmployeesComponents/CreateEmployeeButton";
 
 function EmployeesCollection(){
     const dispatch = useDispatch();
@@ -15,6 +16,7 @@ function EmployeesCollection(){
 
     return(
         <Dashboard sectionName="Employees">
+            <CreateEmployeeButton />
             { employees ? <EmployeesTable employeesArr={employees} /> : null }
         </Dashboard>
     )
