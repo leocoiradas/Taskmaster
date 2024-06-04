@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Button from "../Button";
 import { useDispatch } from "react-redux";
 import { createEmployee, editEmployee } from "../../Store/Actions/EmployeesAction";
 
-function EmployeeManagerForm(employeeDetails) {
+function EmployeeManagerForm({ employeeDetails, closeForm }) {
 
     const dispatch = useDispatch()
 
@@ -16,10 +16,11 @@ function EmployeeManagerForm(employeeDetails) {
 
     useEffect(() => {
         employeeData(employeeFormData);
-    }, [employeeFormData])
+    }, [employeeDetails])
+    
 
     const employeeData = () => {
-        if (employeeFormData) {
+        if (employeeDetails) {
             setemployeeFormData({
                 name: employeeDetails.name,
                 lastName: employeeDetails.lastName,
@@ -37,7 +38,7 @@ function EmployeeManagerForm(employeeDetails) {
             })
         }
 
-        
+    }
 
         const formData = (event) => {
             setemployeeFormData({
@@ -55,16 +56,16 @@ function EmployeeManagerForm(employeeDetails) {
         }
 
         return (
-            <section className="w-full h-full flex justify-center items-center p-3">
-                <form action="" method="post">
+            <section className="w-screen h-screen flex justify-center items-center p-3 fixed inset-0 z-50 bg-gray-500/50">
+                <form action="" method={employeeDetails ? "put" : "post"} className="w-1/2 flex flex-col justify-center items-start p-3 gap-3 text-xl bg-white rounded-md">
                     <label htmlFor="firstName">Name</label>
-                    <input name="firstName" onChange={formData} />
+                    <input name="firstName" onChange={formData} value={employeeFormData.name} />
                     <label htmlFor="lastName">Last Name</label>
-                    <input name="lastName" onChange={formData} />
+                    <input name="lastName" onChange={formData} value={employeeFormData.lastName} />
                     <label htmlFor="email">Email</label>
-                    <input name="email" onChange={formData} />
+                    <input name="email" onChange={formData} value={employeeFormData.email} />
                     <label htmlFor="role">Role</label>
-                    <select name="role" onChange={formData} >
+                    <select name="role" onChange={formData} value={employeeFormData.role}>
                         <option value="employee" selected>Employee</option>
                         <option value="admin">Admin</option>
                     </select>
@@ -77,6 +78,5 @@ function EmployeeManagerForm(employeeDetails) {
             </section>
         );
     }
-}
 
 export default EmployeeManagerForm;
