@@ -1,11 +1,12 @@
 import axios from "axios";
-import { CreateAsyncThunk } from "@reduxjs/toolkit";
+import { createAsyncThunk } from "@reduxjs/toolkit";
 
-export const getEmployees = CreateAsyncThunk("get_employees", async () => {
+export const getEmployees = createAsyncThunk("get_employees", async () => {
     try {
-        const response = await axios.get("http://localhost:3000");
+        const response = await axios.get("https://localhost:5001/api/Employees/get");
+        console.log(response)
         return {
-            employees: response.data.Employees
+            employees: response.data
         };
     } catch (error) {
         console.log(error);
@@ -13,7 +14,7 @@ export const getEmployees = CreateAsyncThunk("get_employees", async () => {
 })
 
 
-export const createEmployee = CreateAsyncThunk("create_employee", async (obj) => {
+export const createEmployee = createAsyncThunk("create_employee", async (obj) => {
     try {
         await axios.post("http://localhost:3000", obj);
     } catch (error) {
@@ -21,7 +22,7 @@ export const createEmployee = CreateAsyncThunk("create_employee", async (obj) =>
     }
 });
 
-export const editEmployee = CreateAsyncThunk("edit_employee", async (obj) => {
+export const editEmployee = createAsyncThunk("edit_employee", async (obj) => {
     try {
         await axios.post("http://localhost:3000", obj);
     } catch (error) {
