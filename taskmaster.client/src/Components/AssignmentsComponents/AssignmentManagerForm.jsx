@@ -64,20 +64,20 @@ function AssignmentManagerForm( { closeForm, assignmentDetails } ) {
         <article className="w-full flex justify-center items-center">
           <form action="" method={assignmentDetails ? "put" : "post"} className="w-1/2 flex flex-col justify-center items-start p-3 gap-3 text-xl bg-white rounded-md">
             <label htmlFor="title" className="font-semibold">Title</label>
-            <input name="title" type="text" value={assignmentData.title} onChange={formData} className="w-full p-2 border-2 rounded-md border-black" />
+            <input name="title" type="text" value={assignmentData.title} onChange={formData} className="w-full p-2 border-2 rounded-md border-black" required />
             <label htmlFor="description" className="font-semibold">Description</label>
-            <textarea name="description" value={assignmentData.description} onChange={formData} className="w-full min-h-80 p-2 border-2 rounded-md border-black" />
+            <textarea name="description" value={assignmentData.description} onChange={formData} className="w-full min-h-80 p-2 border-2 rounded-md border-black" required />
             <label htmlFor="status" className="font-semibold">Status</label>
             <div className="flex gap-3">
-              <input name="status" id="incomplete" type="radio" value="planned" checked={assignmentData.status == "planned"} onChange={formData} />
+              <input name="status" id="incomplete" type="radio" value="planned" checked={assignmentData.status == "planned"} onChange={formData} required />
               <label htmlFor="incomplete">Planned</label>
-              <input name="status" id="in-progress" type="radio" value="in progress" checked={assignmentData.status == "in progress"} onChange={formData} />
+              <input name="status" id="in-progress" type="radio" value="in progress" checked={assignmentData.status == "in progress"} onChange={formData} required />
               <label htmlFor="in-progress">In progress</label>
-              <input name="status" id="complete" type="radio" value="ongoing" checked={assignmentData.status == "ongoing"} onChange={formData} />
+              <input name="status" id="complete" type="radio" value="ongoing" checked={assignmentData.status == "ongoing"} onChange={formData} required />
               <label htmlFor="complete">Ongoing</label>
             </div>
             <label htmlFor="expiration-date">Expiration Date</label>
-            <input type="date" name="expiration-date" value={assignmentData.dueAt} onChange={formData} />
+            <input type="date" name="expiration-date" value={assignmentData.dueAt} onChange={formData} required />
             <div className="flex gap-3">
               <Button buttonName="Send data" buttonColor="blue" eventFunction={assignmentDetails ? editAssignmentData  : newAssignmentData} />
               <Button buttonName="Close form" buttonColor="red" eventFunction={closeForm} />
