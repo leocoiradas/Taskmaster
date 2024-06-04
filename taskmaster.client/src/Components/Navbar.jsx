@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { GrNotes } from "react-icons/gr";
 import { FaUser } from "react-icons/fa";
+import { TiGroup } from "react-icons/ti";
 import LogoutButton from "./LogoutButton";
 
 
@@ -17,6 +18,11 @@ function Navbar({ employeeName }) {
             section: "",
             icon: <FaUser />
         },
+        {
+            name: "Employees",
+            section: "/dashboard/employees",
+            icon: <TiGroup />
+        }
         
     ]
     return (
