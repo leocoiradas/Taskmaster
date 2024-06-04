@@ -60,7 +60,7 @@ function AssignmentManagerForm( { closeForm, assignmentDetails } ) {
     
 
     return (
-      <section className="w-screen h-screen flex justify-center items-center p-3 fixed inset-0 z-50 bg-gray-500/50 ">
+      <section className="w-screen h-screen flex justify-center items-center p-3 fixed inset-0 z-50 bg-gray-500/50">
         <article className="w-full flex justify-center items-center">
           <form action="" method={assignmentDetails ? "put" : "post"} className="w-1/2 flex flex-col justify-center items-start p-3 gap-3 text-xl bg-white rounded-md">
             <label htmlFor="title" className="font-semibold">Title</label>
@@ -69,12 +69,12 @@ function AssignmentManagerForm( { closeForm, assignmentDetails } ) {
             <textarea name="description" value={assignmentData.description} onChange={formData} className="w-full min-h-80 p-2 border-2 rounded-md border-black" />
             <label htmlFor="status" className="font-semibold">Status</label>
             <div className="flex gap-3">
-              <input name="status" id="incomplete" type="radio" value="incomplete" onChange={formData} />
-              <label htmlFor="incomplete">Incomplete</label>
-              <input name="status" id="in-progress" type="radio" value="in progress" onChange={formData} />
+              <input name="status" id="incomplete" type="radio" value="planned" checked={assignmentData.status == "planned"} onChange={formData} />
+              <label htmlFor="incomplete">Planned</label>
+              <input name="status" id="in-progress" type="radio" value="in progress" checked={assignmentData.status == "in progress"} onChange={formData} />
               <label htmlFor="in-progress">In progress</label>
-              <input name="status" id="complete" type="radio" value="complete" onChange={formData} />
-              <label htmlFor="complete">Complete</label>
+              <input name="status" id="complete" type="radio" value="ongoing" checked={assignmentData.status == "ongoing"} onChange={formData} />
+              <label htmlFor="complete">Ongoing</label>
             </div>
             <label htmlFor="expiration-date">Expiration Date</label>
             <input type="date" name="expiration-date" value={assignmentData.dueAt} onChange={formData} />
