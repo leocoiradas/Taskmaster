@@ -5,8 +5,8 @@ function DeleteAssignmentConfirmation({ deleteAssignment, closeForm }){
             <form action="" method="post" className="flex flex-col p-4 gap-5 bg-white rounded-md">
                 <p>Are you sure that you want to delete this assignment?</p>
                 <div className="flex justify-around items-center">
-                    <Button buttonName = "Delete" buttonColor = "black" eventFunction = {deleteAssignment} />
-                    <Button buttonName = "Close" buttonColor = "red" eventFunction = {closeForm} />
+                    <Button buttonName = "Delete" buttonColor = "red" eventFunction = {deleteAssignment} />
+                    <Button buttonName = "Close this form" buttonColor = "blue" eventFunction = {closeForm} />
                 </div>
             </form>
         </article>
