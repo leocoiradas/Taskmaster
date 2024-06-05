@@ -15,6 +15,10 @@ function Assignment({assignment}) {
         setDeleteForm(!deleteForm)
     }
 
+    var assignmentCreationDate = new Date(assignment.createdAt);
+    var assignmentDueDate = new Date(assignment.dueAt);
+    var options = { year: 'numeric', month: 'numeric', day: 'numeric' };
+
     return (
         <>
             <article className="w-[30dvw] h-[50dvh] flex flex-col justify-around items-center p-3 gap-3 text-base text-center border-2 border-md rounded-md border-black shadow-2xl">
@@ -24,11 +28,11 @@ function Assignment({assignment}) {
                 <div className="flex w-full justify-around items-center gap-5">
                     <div className="flex flex-col">
                         <p>Creado el:</p>
-                        <p>{assignment.createdAt}</p>
+                        <p>{assignmentCreationDate.toLocaleDateString("es-US", options)}</p>
                     </div>
                     <div className="flex flex-col">
                         <p>Válido hasta:</p>
-                        <p>{assignment.dueAt}</p>
+                        <p>{assignmentDueDate.toLocaleDateString("es-US", options)}</p>
                     </div>
                 </div>
                 <div className="flex w-full justify-around items-center">
