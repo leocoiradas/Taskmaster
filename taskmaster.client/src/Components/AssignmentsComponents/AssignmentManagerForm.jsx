@@ -50,13 +50,16 @@ function AssignmentManagerForm({ closeForm, assignmentDetails }) {
   }
 
   const editAssignmentData = async () => {
+    
     dispatch(editAssignment(assignmentData));
     navigate("/dashboard")
   }
-  const newAssignmentData = async () => {
+  const newAssignmentData = () => {
     dispatch(createAssignment(assignmentData));
+    alert("The Assignment was succesfully created.")
     navigate("/dashboard")
   }
+
 
 
   return (
