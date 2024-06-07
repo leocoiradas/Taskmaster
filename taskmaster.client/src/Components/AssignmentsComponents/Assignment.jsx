@@ -19,6 +19,8 @@ function Assignment({assignment}) {
     var assignmentDueDate = new Date(assignment.dueAt);
     var options = { year: 'numeric', month: 'numeric', day: 'numeric' };
 
+    
+
     return (
         <>
             <article className="w-[30dvw] h-[50dvh] flex flex-col justify-around items-center p-3 gap-3 text-base text-center border-2 border-md rounded-md border-black shadow-2xl">
@@ -42,7 +44,7 @@ function Assignment({assignment}) {
                 {/*<Button buttonName= {"Delete"} buttonColor={"Red"} eventFunction={showDeleteForm} />*/}
             </article>
             {formVisibility ? <AssignmentManagerForm closeForm={showForm} assignmentDetails={assignment} /> : null}
-            {deleteForm ? <DeleteAssignmentConfirmation closeForm={showDeleteForm} /> : null}
+            {deleteForm ? <DeleteAssignmentConfirmation assignmentID={assignment.assignmentId} closeForm={showDeleteForm} /> : null}
         </>
   );
 }
