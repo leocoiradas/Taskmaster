@@ -46,7 +46,9 @@ function AssignmentManagerForm({ closeForm, assignmentDetails }) {
     setAssignmentData({
       ...assignmentData,
       [event.target.name]: event.target.value
+      
     });
+    console.log(assignmentData)
   }
 
   const editAssignmentData = async () => {
@@ -60,7 +62,7 @@ function AssignmentManagerForm({ closeForm, assignmentDetails }) {
     navigate("/dashboard")
   }
 
-
+ 
 
   return (
     <section className="w-screen h-screen flex justify-center items-center p-3 fixed inset-0 z-50 bg-gray-500/50">
@@ -88,8 +90,8 @@ function AssignmentManagerForm({ closeForm, assignmentDetails }) {
               </div>
             </fieldset>
             <div className="flex flex-col">
-              <label htmlFor="expiration-date" className="font-semibold">Expiration Date</label>
-              <input type="date" name="expiration-date" value={assignmentData.dueAt} onChange={formData} required className="w-1/2 p-2" />
+              <label htmlFor="dueAt" className="font-semibold">Expiration Date</label>
+              <input type="date" name="dueAt" value={assignmentData.dueAt} onChange={formData} required className="w-1/2 p-2" />
             </div>
             <div className="flex gap-3">
               <Button buttonName="Send data" buttonColor="blue" eventFunction={assignmentDetails ? editAssignmentData : newAssignmentData} />
