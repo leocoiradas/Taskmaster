@@ -22,12 +22,42 @@ namespace Taskmaster.Server.Controllers
         {
             try
             {
-                List<Assignment> TasksCollections = await _dbcontext.Assignments.OrderByDescending(e => e.AssignmentId).ToListAsync();
+                List<Assignment> TasksCollections = await _dbcontext.Assignments.OrderByDescending(e => e.CreatedAt).ToListAsync();
                 return StatusCode(StatusCodes.Status200OK, TasksCollections);
             }
             catch (Exception error)
             {
 
+                return StatusCode(StatusCodes.Status500InternalServerError, error);
+            }
+        }
+        [HttpPost]
+        [Route("create")]
+        public async Task <IActionResult> CreateAssignment([FromBody]Assignment NewAssignmentData)
+        {
+            try
+            {
+
+                Assignment existantAssignment = _dbcontext.Assignments.FirstOrDefault(element => element.Title == NewAssignmentData.Title);
+
+                if (existantAssignment == null)
+                {
+
+                    NewAssignmentData.AssignmentId = Guid.NewGuid();
+                    //NewAssignmentData.DueAt = DateOnly.Parse(NewAssignmentData.DueAt, "yyyy-MM-dd");
+                    _dbcontext.Assignments.Add(NewAssignmentData);
+                    await _dbcontext.SaveChangesAsync();
+                    return StatusCode(StatusCodes.Status200OK, NewAssignmentData);
+                }
+                else 
+                {
+                    return StatusCode(StatusCodes.Status409Conflict, "An element with the same caracteristics is already in the database");
+                }
+            }
+            catch (Exception error)
+            {
+
+                Console.WriteLine(error);
                 return StatusCode(StatusCodes.Status500InternalServerError, error);
             }
         }
@@ -37,6 +67,7 @@ namespace Taskmaster.Server.Controllers
         public async Task<IActionResult> GetAssignmentById(string id)
         {
             Assignment assignment = await _dbcontext.Assignments.FindAsync(id);
+
             if (assignment != null)
             {
                 return StatusCode(StatusCodes.Status200OK, assignment);
@@ -55,8 +86,8 @@ namespace Taskmaster.Server.Controllers
             {
                 
               
-                    _dbcontext.Assignments.Update(assignmentData);
-                    await _dbcontext.SaveChangesAsync();
+                _dbcontext.Assignments.Update(assignmentData);
+                await _dbcontext.SaveChangesAsync();
                 return StatusCode(StatusCodes.Status200OK, assignmentData);
 
 
@@ -71,20 +102,28 @@ namespace Taskmaster.Server.Controllers
         }
 
         [HttpDelete]
-        [Route("delete/edit")]
-        public async Task<IActionResult> DeleteAssignment(string id)
+        [Route("delete/{id}")]
+        public async Task<IActionResult> DeleteAssignment(Guid id)
         {
-            Assignment searchAssignment = await _dbcontext.Assignments.FindAsync(id);
-            if (searchAssignment != null)
+            try
             {
-                _dbcontext.Assignments.Remove(searchAssignment);
-                await _dbcontext.SaveChangesAsync();
-                return RedirectToAction("Index");
+                Assignment searchAssignment = await _dbcontext.Assignments.FindAsync(id);
+                if (searchAssignment != null)
+                {
+                    _dbcontext.Assignments.Remove(searchAssignment);
+                    await _dbcontext.SaveChangesAsync();
+                    return StatusCode(StatusCodes.Status200OK, "Assignment deleted succesfully");
 
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status404NotFound);
+                }
             }
-            else
+            catch (Exception error)
             {
-                return StatusCode(StatusCodes.Status404NotFound);
+                Console.WriteLine(error);
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
     }
