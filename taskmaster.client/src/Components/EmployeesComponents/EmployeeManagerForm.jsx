@@ -2,10 +2,13 @@ import { useState, useEffect } from "react";
 import Button from "../Button";
 import { useDispatch } from "react-redux";
 import { createEmployee, editEmployee } from "../../Store/Actions/EmployeesAction";
+import { useNavigate } from "react-router-dom";
 
 function EmployeeManagerForm({ employeeDetails, closeForm }) {
 
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
+
+    const navigate = useNavigate();
 
     const [employeeFormData, setemployeeFormData] = useState({
         name: "",
@@ -48,11 +51,15 @@ function EmployeeManagerForm({ employeeDetails, closeForm }) {
     }
 
     const createemployeeFormData = () => {
-        dispatch(createEmployee)
+        dispatch(createEmployee);
+        alert("The Assignment was succesfully created.")
+        navigate("/dashboard/employees");
     }
 
     const editemployeeFormData = () => {
-        dispatch(editEmployee)
+        dispatch(editEmployee);
+        alert("The Assignment was succesfully edited")
+        navigate("/dashboard/employees");
     }
 
     return (
