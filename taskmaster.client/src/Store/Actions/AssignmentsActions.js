@@ -4,7 +4,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export const createAssignment = createAsyncThunk("create_assignment", async (newAssignment) => {
     try {
-        await axios.post("http://localhost:3000", newAssignment);
+        await axios.post("https://localhost:5001/api/Assignments/create", newAssignment);
     } catch (error) {
         console.log(error)
     }
@@ -44,7 +44,9 @@ export const editAssignment = createAsyncThunk("edit_assignment", async (assignm
 
 export const deleteAssignment = createAsyncThunk("delete_assignment", async (assignmentID) => {
     try {
-        await axios.post(`http://localhost:3000/${assignmentID}`);
+        await axios.delete(`https://localhost:5001/Assignments/delete/${assignmentID}`, {
+            data: { assignmentID },
+          });
     } catch (error) {
         console.log(error);
     }
