@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Taskmaster.Server.Models;
 
+
 namespace Taskmaster.Server.Controllers
 {
     [Route("api/[controller]")]
@@ -18,19 +19,39 @@ namespace Taskmaster.Server.Controllers
 
         [HttpGet]
         [Route("assignments")]
-        public async Task <IActionResult> GetAssignments()
+        public async Task<IActionResult> GetAssignments()
         {
             try
             {
-                List<Assignment> TasksCollections = await _dbcontext.Assignments.OrderByDescending(e => e.CreatedAt).ToListAsync();
-                return StatusCode(StatusCodes.Status200OK, TasksCollections);
+                var assignments = await _dbcontext.Assignments
+                    .Include(e => e.EmployeeAssignedNavigation) 
+                    .OrderByDescending(e => e.CreatedAt)
+                    .Select(assignment => new 
+                    {
+                        AssignmentId = assignment.AssignmentId,
+                        EmployeeAssigned = assignment.EmployeeAssigned,
+                        Title = assignment.Title,
+                        Description = assignment.Description,
+                        Status = assignment.Status,
+                        CreatedAt = assignment.CreatedAt,
+                        DueAt = assignment.DueAt,
+                        Employee = assignment.EmployeeAssignedNavigation != null ? new // Check for null employee
+                        {
+                            Name = assignment.EmployeeAssignedNavigation.Name,
+                            LastName = assignment.EmployeeAssignedNavigation.LastName
+                            // Assuming Surname exists in your Employee class
+                        } : null // Return null if employee is null
+                    })
+                    .ToListAsync();
+
+                return StatusCode(StatusCodes.Status200OK, assignments);
             }
             catch (Exception error)
             {
-
                 return StatusCode(StatusCodes.Status500InternalServerError, error);
             }
         }
+
         [HttpPost]
         [Route("create")]
         public async Task <IActionResult> CreateAssignment([FromBody]Assignment NewAssignmentData)
