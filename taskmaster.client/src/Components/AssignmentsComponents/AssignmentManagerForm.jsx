@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { editAssignment, createAssignment } from "../../Store/Actions/AssignmentsActions";
 import { useNavigate } from "react-router-dom";
 
-function AssignmentManagerForm({ closeForm, assignmentDetails }) {
+function AssignmentManagerForm({ closeForm, assignmentDetails, employeesList }) {
 
   const dispatch = useDispatch();
 
@@ -12,6 +12,7 @@ function AssignmentManagerForm({ closeForm, assignmentDetails }) {
 
   const [assignmentData, setAssignmentData] = useState({
     title: "",
+    employeeAssigned: 0,
     description: "",
     status: "",
     dueAt: new Date()
@@ -25,6 +26,7 @@ function AssignmentManagerForm({ closeForm, assignmentDetails }) {
     if (assignmentDetails) {
       setAssignmentData({
         title: assignmentDetails.title,
+        employeeAssigned: assignmentDetails.employeeAssigned,
         description: assignmentDetails.description,
         status: assignmentDetails.status,
         dueAt: assignmentDetails.dueAt
@@ -34,6 +36,7 @@ function AssignmentManagerForm({ closeForm, assignmentDetails }) {
     } else {
       setAssignmentData({
         title: "",
+        employeeAssigned: 0,
         description: "",
         status: "",
       })
@@ -76,8 +79,19 @@ function AssignmentManagerForm({ closeForm, assignmentDetails }) {
             </fieldset>
             <fieldset>
               <label htmlFor="description" className="font-semibold">Description</label>
-              <textarea name="description" value={assignmentData.description} onChange={formData} className="w-full min-h-80 p-2 border-2 rounded-md border-black" required />
+              <textarea name="description" value={assignmentData.description} onChange={formData} className="w-full min-h-48 p-2 border-2 rounded-md border-black" required />
             </fieldset>
+            {!assignmentDetails ? (
+              <fieldset>
+                <label htmlFor="employeeAssigned" className="font-semibold">Employee Assigned</label>
+                <select name="employeeAssigned" onChange={formData} className="w-full p-2 border-2 rounded-md border-black" required>
+                  <option value={0} selected>Select an employee</option>
+                  {employeesList ?  employeesList.map((element) => (
+                    <option value={element.employeeID}>{element.name} {element.lastName}</option>
+                  )) : null}
+                </select>
+              </fieldset>
+            ) : null}
             <fieldset>
               <label htmlFor="status" className="font-semibold">Status</label>
               <div className="flex gap-3">
