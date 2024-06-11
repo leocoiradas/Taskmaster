@@ -29,7 +29,7 @@ public partial class TaskmasterContext : DbContext
 
             entity.Property(e => e.AssignmentId)
                 .HasDefaultValueSql("(newid())")
-                .HasColumnName("AssignmentID");
+                .HasColumnName("AssignmentId");
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(CONVERT([date],getdate()))");
             entity.Property(e => e.Description)
                 .HasMaxLength(500)
@@ -50,7 +50,7 @@ public partial class TaskmasterContext : DbContext
         {
             entity.HasKey(e => e.EmployeeId).HasName("PK__Employee__7AD04FF170C9EEBE");
 
-            entity.Property(e => e.EmployeeId).HasColumnName("EmployeeID");
+            entity.Property(e => e.EmployeeId).HasColumnName("EmployeeId");
             entity.Property(e => e.Email)
                 .HasMaxLength(40)
                 .IsUnicode(false);
