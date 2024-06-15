@@ -27,6 +27,7 @@ function Assignment({assignment}) {
                 <h3 className="text-lg font-bold">{assignment.title}</h3>
                 <p>{assignment.description}</p>
                 <p>Estado: {assignment.status}</p>
+                <p>Empleado asignado: {assignment.employee.name} {assignment.employee.lastName}</p>
                 <div className="flex w-full justify-around items-center gap-5">
                     <div className="flex flex-col">
                         <p>Creado el:</p>
