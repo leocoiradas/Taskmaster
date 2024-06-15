@@ -41,13 +41,13 @@ namespace Taskmaster.Server.Controllers
         [Route("create")]
         public async Task<IActionResult> CreateEmployee([FromBody] Employee employeeData)
         {
-            Employee searchEmployee = _dbcontext.Employees.Find(employeeData.Email);
+            Employee searchEmployee = _dbcontext.Employees.FirstOrDefault(e => e.Email == employeeData.Email);
             if (searchEmployee == null)
             {
                 employeeData.Password = BCrypt.Net.BCrypt.HashPassword(employeeData.Password);
                 await _dbcontext.Employees.AddAsync(employeeData);
                 await _dbcontext.SaveChangesAsync();
-                return StatusCode(StatusCodes.Status200OK);
+                return StatusCode(StatusCodes.Status200OK, "The employee was successfully created");
             }
             else
             {
