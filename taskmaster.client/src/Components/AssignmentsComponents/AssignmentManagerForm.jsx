@@ -2,13 +2,10 @@ import { useState, useEffect } from "react";
 import Button from "../Button";
 import { useDispatch } from 'react-redux';
 import { editAssignment, createAssignment } from "../../Store/Actions/AssignmentsActions";
-import { useNavigate } from "react-router-dom";
 
 function AssignmentManagerForm({ closeForm, assignmentDetails, employeesList }) {
 
   const dispatch = useDispatch();
-
-  const navigate = useNavigate();
 
   const [assignmentData, setAssignmentData] = useState({
     title: "",
@@ -54,15 +51,24 @@ function AssignmentManagerForm({ closeForm, assignmentDetails, employeesList }) 
     console.log(assignmentData)
   }
 
-  const editAssignmentData = async () => {
+  const editAssignmentData = async (event) => {
+    event.preventDefault();
+    try {
+      dispatch(editAssignment(assignmentData));
+      window.location.reload(false)
+    } catch (error) {
+      console.log(error)
+    }
     
-    dispatch(editAssignment(assignmentData));
-    navigate("/dashboard")
   }
-  const newAssignmentData = () => {
-    dispatch(createAssignment(assignmentData));
-    alert("The Assignment was succesfully created.")
-    navigate("/dashboard")
+  const newAssignmentData = async (event) => {
+    event.preventDefault();
+    try{
+      dispatch(createAssignment(assignmentData));
+      window.location.reload(false)
+    } catch (error){
+      console.log(error)
+    }
   }
 
  
@@ -87,7 +93,7 @@ function AssignmentManagerForm({ closeForm, assignmentDetails, employeesList }) 
                 <select name="employeeAssigned" onChange={formData} className="w-full p-2 border-2 rounded-md border-black" required>
                   <option value={0} selected>Select an employee</option>
                   {employeesList ?  employeesList.map((element) => (
-                    <option value={element.employeeID}>{element.name} {element.lastName}</option>
+                    <option value={element.employeeId}>{element.employeeId} - {element.name} {element.lastName}</option>
                   )) : null}
                 </select>
               </fieldset>
@@ -108,7 +114,7 @@ function AssignmentManagerForm({ closeForm, assignmentDetails, employeesList }) 
               <input type="date" name="dueAt" value={assignmentData.dueAt} onChange={formData} required className="w-1/2 p-2" />
             </div>
             <div className="flex gap-3">
-              <Button buttonName="Send data" buttonColor="blue" eventFunction={assignmentDetails ? editAssignmentData : newAssignmentData} />
+              <input type="submit" name="Send data" onClick={assignmentDetails == null ? editAssignmentData : newAssignmentData} className="px-6 py-4 text-center rounded-md text-white bg-blue-700 cursor-pointer" />
               <Button buttonName="Close form" buttonColor="red" eventFunction={closeForm} />
             </div>
           </fieldset>
