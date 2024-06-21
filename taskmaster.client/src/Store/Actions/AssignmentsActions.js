@@ -37,6 +37,7 @@ export const getAssignmentsByEmployee = createAsyncThunk("get_assignments_by_emp
 export const editAssignment = createAsyncThunk("edit_assignment", async (assignmentData) => {
     try {
         await axios.put("https://localhost:5001/api/Assignments/update", assignmentData);
+        return window.location.reload()
     } catch (error) {
         console.log(error);
     }
