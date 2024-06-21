@@ -11,29 +11,29 @@ function AssignmentManagerForm({ closeForm, assignmentDetails, employeesList, re
 
   const schema = Joi.object({
     title: Joi.string().trim().required().min(4).max(200).messages({
-      "string.base": "Title should be an element of type 'text'." ,
-      "string.min": "Title length should be longer than 4 characters.",
-      "string.empty": "Please write a title for the assignment.",
-      "string.max": "Title length should be shorter than 200 characters.",
-      "any.required": "Title is required."
+      "string.base": "* Title should be an element of type 'text'." ,
+      "string.min": "* Title length should be longer than 4 characters.",
+      "string.empty": "* Please write a title for the assignment.",
+      "string.max": "* Title length should be shorter than 200 characters.",
+      "any.required": "* Title is required."
     }),
     employeeAssigned: Joi.number().required().min(1).messages({
-      "number.empty": "You must assign the task to a valid employee.",
-      "number.min": "You must select a valid employee.",
-      "any.required": "An employee must be selected."
+      "number.empty": "* You must assign the task to a valid employee.",
+      "number.min": "* You must select a valid employee.",
+      "any.required": "* An employee must be selected."
     }),
     description: Joi.string().trim().required().messages({
-      "string.empty": "Describe the objectives and details of the assignment.",
-      "any.required": "Description is required."
+      "string.empty": "* Describe the objectives and details of the assignment.",
+      "any.required": "* Description is required."
     }),
     status: Joi.string().required().messages({
-      "string.empty": "Please select a valid status.",
-      "any.required": "You must select a status for the assignment."
+      "string.empty": "* Please select a valid status.",
+      "any.required": "* You must select a status for the assignment."
     }),
     dueAt: Joi.date().required().greater("now").messages({
-      "any.required": "You must set an expiring date for the assignment.",
-      "date.greater": "The date should be greater than today.",
-      "date.base": "Please enter a valid date."
+      "any.required": "* You must set an expiring date for the assignment.",
+      "date.greater": "* The date should be greater than today.",
+      "date.base": "* Please enter a valid date."
     }),
   });
 
