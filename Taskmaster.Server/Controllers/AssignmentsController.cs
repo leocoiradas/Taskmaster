@@ -58,22 +58,11 @@ namespace Taskmaster.Server.Controllers
         {
             try
             {
-
-                Assignment existantAssignment = _dbcontext.Assignments.FirstOrDefault(element => element.Title == NewAssignmentData.Title);
-
-                if (existantAssignment == null)
-                {
-
-                    NewAssignmentData.AssignmentId = Guid.NewGuid();
-                    //NewAssignmentData.DueAt = DateOnly.Parse(NewAssignmentData.DueAt, "yyyy-MM-dd");
-                    _dbcontext.Assignments.Add(NewAssignmentData);
-                    await _dbcontext.SaveChangesAsync();
-                    return StatusCode(StatusCodes.Status200OK, NewAssignmentData);
-                }
-                else 
-                {
-                    return StatusCode(StatusCodes.Status409Conflict, "An element with the same caracteristics is already in the database");
-                }
+                NewAssignmentData.AssignmentId = Guid.NewGuid();
+                //NewAssignmentData.DueAt = DateOnly.Parse(NewAssignmentData.DueAt, "yyyy-MM-dd");
+                _dbcontext.Assignments.Add(NewAssignmentData);
+                await _dbcontext.SaveChangesAsync();
+                return StatusCode(StatusCodes.Status200OK, NewAssignmentData);
             }
             catch (Exception error)
             {
