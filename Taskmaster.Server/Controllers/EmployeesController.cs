@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Taskmaster.Server.DTO;
 using Taskmaster.Server.Models;
 
 namespace Taskmaster.Server.Controllers
@@ -21,21 +22,32 @@ namespace Taskmaster.Server.Controllers
         [Route("get")]
         public async Task <IActionResult> GetEmployees()
         {
-            List<Employee> Employees = await _dbcontext.Employees.OrderByDescending(e => e.EmployeeId).ToListAsync();
-            return StatusCode(StatusCodes.Status200OK, Employees);
+            /*List<Employee> Employees = await _dbcontext.Employees.OrderByDescending(e => e.EmployeeId).ToListAsync();*/
+            List<EmployeeDTO> employeesDTO = await _dbcontext.Employees
+             .Select(e => new EmployeeDTO
+                {
+                    EmployeeId = e.EmployeeId,
+                    Name = e.Name,
+                    LastName = e.LastName,
+                    Email = e.Email,
+                    Role = e.Role
+                })
+            
+            .ToListAsync();
+            return StatusCode(StatusCodes.Status200OK, employeesDTO);
         }
 
         [HttpPost]
         [Route("create")]
         public async Task<IActionResult> CreateEmployee([FromBody] Employee employeeData)
         {
-            Employee searchEmployee = _dbcontext.Employees.Find(employeeData.Email);
+            Employee searchEmployee = _dbcontext.Employees.FirstOrDefault(e => e.Email == employeeData.Email);
             if (searchEmployee == null)
             {
                 employeeData.Password = BCrypt.Net.BCrypt.HashPassword(employeeData.Password);
                 await _dbcontext.Employees.AddAsync(employeeData);
                 await _dbcontext.SaveChangesAsync();
-                return StatusCode(StatusCodes.Status200OK);
+                return StatusCode(StatusCodes.Status200OK, "The employee was successfully created");
             }
             else
             {
@@ -54,7 +66,7 @@ namespace Taskmaster.Server.Controllers
         }
 
         [HttpDelete]
-        [Route("delete/{int: id}")]
+        [Route("delete")]
         public async Task<IActionResult> Delete(int id)
         {
             Employee employee = _dbcontext.Employees.Find(id);
