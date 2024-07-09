@@ -11,6 +11,7 @@ namespace Taskmaster.Server.Controllers
     public class EmployeesController : ControllerBase
     {
         private readonly TaskmasterContext _dbcontext;
+        
 
         public EmployeesController(TaskmasterContext dbcontext)
         {
@@ -45,7 +46,7 @@ namespace Taskmaster.Server.Controllers
             Employee searchEmployee = _dbcontext.Employees.FirstOrDefault(e => e.Email == employeeData.Email);
             if (searchEmployee == null)
             {
-                employeeData.Password = BCrypt.Net.BCrypt.HashPassword(employeeData.Password);
+                employeeData.Password = employeeData.Password != null ? BCrypt.Net.BCrypt.HashPassword(employeeData.Password) :"";
                 await _dbcontext.Employees.AddAsync(employeeData);
                 await _dbcontext.SaveChangesAsync();
                 return StatusCode(StatusCodes.Status200OK, "The employee was successfully created");
@@ -53,7 +54,7 @@ namespace Taskmaster.Server.Controllers
             else
             {
                 //ViewData["Error"] = "There's already an employee with the email provided in the database";
-                return StatusCode(StatusCodes.Status400BadRequest);
+                return StatusCode(StatusCodes.Status400BadRequest, "There's already an employee with the email provided in the database");
             }
         }
 

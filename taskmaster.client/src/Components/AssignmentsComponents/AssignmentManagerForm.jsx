@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { joiResolver } from '@hookform/resolvers/joi';
 
 
-function AssignmentManagerForm({ closeForm, assignmentDetails, employeesList, reset }) {
+function AssignmentManagerForm({ closeForm, assignmentDetails, employeesList}) {
 
 
   const schema = Joi.object({
