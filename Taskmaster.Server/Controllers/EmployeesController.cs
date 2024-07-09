@@ -12,27 +12,28 @@ namespace Taskmaster.Server.Controllers
     {
         private readonly TaskmasterContext _dbcontext;
 
-        public EmployeesController(TaskmasterContext dbcontext) {
-            
+        public EmployeesController(TaskmasterContext dbcontext)
+        {
+
             _dbcontext = dbcontext;
 
         }
 
         [HttpGet]
         [Route("get")]
-        public async Task <IActionResult> GetEmployees()
+        public async Task<IActionResult> GetEmployees()
         {
             /*List<Employee> Employees = await _dbcontext.Employees.OrderByDescending(e => e.EmployeeId).ToListAsync();*/
             List<EmployeeDTO> employeesDTO = await _dbcontext.Employees
              .Select(e => new EmployeeDTO
-                {
-                    EmployeeId = e.EmployeeId,
-                    Name = e.Name,
-                    LastName = e.LastName,
-                    Email = e.Email,
-                    Role = e.Role
-                })
-            
+             {
+                 EmployeeId = e.Id,
+                 Name = e.FirstName,
+                 LastName = e.LastName,
+                 Email = e.Email,
+                 Role = e.Role
+             })
+
             .ToListAsync();
             return StatusCode(StatusCodes.Status200OK, employeesDTO);
         }
@@ -80,7 +81,7 @@ namespace Taskmaster.Server.Controllers
             {
                 return StatusCode(StatusCodes.Status404NotFound);
             }
-            
+
         }
     }
 
