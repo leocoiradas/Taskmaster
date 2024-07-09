@@ -25,46 +25,57 @@ public partial class TaskmasterContext : DbContext
     {
         modelBuilder.Entity<Assignment>(entity =>
         {
-            entity.HasKey(e => e.AssignmentId).HasName("PK__Assignme__32499E5700A5F880");
+            entity.HasNoKey();
 
-            entity.Property(e => e.AssignmentId)
-                .HasDefaultValueSql("(newid())")
-                .HasColumnName("AssignmentId");
-            entity.Property(e => e.CreatedAt).HasDefaultValueSql("(CONVERT([date],getdate()))");
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("(CONVERT([datetime],getdate()))")
+                .HasColumnType("datetime");
             entity.Property(e => e.Description)
                 .HasMaxLength(500)
                 .IsUnicode(false);
+            entity.Property(e => e.DueAt).HasColumnType("datetime");
+            entity.Property(e => e.EmployeeId).HasColumnName("EmployeeID");
+            entity.Property(e => e.Id)
+                .HasDefaultValueSql("(newid())")
+                .HasColumnName("ID");
             entity.Property(e => e.Status)
                 .HasMaxLength(20)
                 .IsUnicode(false);
             entity.Property(e => e.Title)
                 .HasMaxLength(50)
                 .IsUnicode(false);
+            entity.Property(e => e.UpdatedAt)
+                .HasDefaultValueSql("(NULL)")
+                .HasColumnType("datetime");
 
-            entity.HasOne(d => d.EmployeeAssignedNavigation).WithMany(p => p.Assignments)
-                .HasForeignKey(d => d.EmployeeAssigned)
-                .HasConstraintName("FK__Assignmen__Emplo__6FE99F9F");
+            entity.HasOne(d => d.Employee).WithMany()
+                .HasForeignKey(d => d.EmployeeId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__Assignmen__Emplo__0C85DE4D");
         });
 
         modelBuilder.Entity<Employee>(entity =>
         {
-            entity.HasKey(e => e.EmployeeId).HasName("PK__Employee__7AD04FF170C9EEBE");
+            entity.HasKey(e => e.Id).HasName("PK__Employee__3214EC275626FB33");
 
-            entity.Property(e => e.EmployeeId).HasColumnName("EmployeeId");
-            entity.Property(e => e.Email)
-                .HasMaxLength(40)
-                .IsUnicode(false);
-            entity.Property(e => e.LastName)
+            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.Country)
                 .HasMaxLength(50)
                 .IsUnicode(false);
-            entity.Property(e => e.Name)
+            entity.Property(e => e.Email)
+                .HasMaxLength(100)
+                .IsUnicode(false);
+            entity.Property(e => e.FirstName)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.LastName)
                 .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.Password)
                 .HasMaxLength(200)
                 .IsUnicode(false);
             entity.Property(e => e.Role)
-                .HasMaxLength(20)
+                .HasMaxLength(10)
                 .IsUnicode(false);
         });
 
