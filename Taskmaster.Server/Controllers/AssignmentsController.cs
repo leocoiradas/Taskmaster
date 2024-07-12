@@ -24,7 +24,7 @@ namespace Taskmaster.Server.Controllers
             try
             {
                 var assignments = await _dbcontext.Assignments
-                    .Include(e => e.EmployeeId)
+                    .Include(e => e.Employee)
                     .OrderByDescending(e => e.CreatedAt)
                     .Select(assignment => new
                     {
