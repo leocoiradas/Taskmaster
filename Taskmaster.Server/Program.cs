@@ -1,8 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using System.Diagnostics;
 using System.Text;
 using Taskmaster.Server.Models;
 using Taskmaster.Server.Services;
@@ -31,7 +29,7 @@ builder.Services.AddCors(options =>
     });
 });
 
-//Configuración necesaria para la autenticación con JWT
+//Configuraciï¿½n necesaria para la autenticaciï¿½n con JWT
 
 builder.Services.AddScoped<IAuthorizeService, AuthorizeService>();
 
@@ -57,7 +55,7 @@ builder.Services.AddAuthentication(config =>
     };
 });
 
-//Fin de la configuración de JWT
+//Fin de la configuraciï¿½n de JWT
 
 
 /*public void ConfigureServices(IServiceCollection services)
@@ -82,7 +80,7 @@ app.UseHttpsRedirection();
 
 app.UseCors("CorsPolitics");
 
-//Se hace uso de autenticación en la app
+//Se hace uso de autenticaciï¿½n en la app
 app.UseAuthentication();
 
 app.UseAuthorization();
