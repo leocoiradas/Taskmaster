@@ -46,7 +46,7 @@ namespace Taskmaster.Server.Controllers
             Employee searchEmployee = _dbcontext.Employees.FirstOrDefault(e => e.Email == employeeData.Email);
             if (searchEmployee == null)
             {
-                employeeData.Password = employeeData.Password != null ? BCrypt.Net.BCrypt.HashPassword(employeeData.Password) :"";
+                employeeData.Password = BCrypt.Net.BCrypt.HashPassword(employeeData.Password);
                 await _dbcontext.Employees.AddAsync(employeeData);
                 await _dbcontext.SaveChangesAsync();
                 return StatusCode(StatusCodes.Status200OK, "The employee was successfully created");
