@@ -4,11 +4,21 @@ import WelcomeHomepage from "../Layouts/WelcomeHomepage";
 import Layout from "../Layouts/Layout";
 import AssignmentsByEmployee from "../Layouts/AssignmentsByEmployee";
 import EmployeesCollection from "../Layouts/EmployeesCollection";
+import LoginForm from "../Components/UserSessionsComponents/LoginForm";
+import RegistrationForm from "../Components/UserSessionsComponents/RegistrationForm";
 
 export const router = createBrowserRouter([
     {
-        path: "/",
-        element: <WelcomeHomepage />
+        path: "",
+        element: <WelcomeHomepage />,
+    },
+    {
+        path: "/login",
+        element: <LoginForm />
+    },
+    {
+        path: "/register",
+        element: <RegistrationForm />
     },
     {
         path: "/dashboard",
