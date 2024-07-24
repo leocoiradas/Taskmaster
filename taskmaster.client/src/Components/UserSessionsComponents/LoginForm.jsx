@@ -38,14 +38,18 @@ function LoginForm(){
         },
     ]
 
+    const submitData = handleSubmit((data) => {
+        console.log(data)
+    })
+
     return(
         <section className="w-screen h-screen flex justify-center items-center">
-            <form className="w-1/3 flex flex-col gap-5">
+            <form onSubmit={submitData} className="w-1/3 flex flex-col gap-5">
                 <legend className="font-semibold text-xl text-center">Login</legend>
                 {fields.map((element) => (
                     <fieldset className="flex flex-col gap-1">
                         <div className="flex w-full">
-                            <label htmlFor={element.fieldName} className="flex-1 font-semibold">{element.labelText}</label>
+                            <label htmlFor={element.fieldName} className="flex-1 text-lg font-semibold">{element.labelText}</label>
                             <p className="inline text-right text-lg text-red-600">{errors[element.fieldName]?.message}</p>
                         </div>
                         <input type={element.fieldType} id={element.fieldName} {...register(element.fieldName)} placeholder={element.placeholder} className="block w-full p-2 border-2 rounded-sm border-black" />
