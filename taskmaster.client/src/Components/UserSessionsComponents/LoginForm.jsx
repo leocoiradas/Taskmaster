@@ -1,6 +1,7 @@
 import Joi from 'joi';
 import { useForm } from "react-hook-form";
 import { joiResolver } from '@hookform/resolvers/joi';
+import { Link } from 'react-router-dom';
 
 function LoginForm(){
 
@@ -54,7 +55,7 @@ function LoginForm(){
                     <div className="flex w-full text-lg items-baseline">
                         <input type="submit" className="p-2 rounded-sm bg-cyan-400 cursor-pointer hover:bg-purple-700" value="Sign In" /> 
                         <p className="text-right flex-1 mr-1">You don't have an account? Register</p> 
-                        <a href="#" className="font-semibold underline  text-cyan-500 hover:text-purple-700">here</a>
+                        <Link to="/register" className="font-semibold underline  text-cyan-500 hover:text-purple-700">here</Link>
                     </div>
                 </fieldset>
             </form>
