@@ -4,7 +4,6 @@ import { joiResolver } from '@hookform/resolvers/joi';
 import { Link } from 'react-router-dom';
 
 function RegistrationForm(){
-
     const schema = Joi.object({
         firstName: Joi.string().min(2).required().messages({
             "string.base": "* Please insert a valid name.",
@@ -23,12 +22,12 @@ function RegistrationForm(){
             "date.base": "* Set a valid date",
             "any.required": "* Birth date is required"
         }),
-        email: Joi.string().email({ tlds: { allow: false } }).pattern(new RegExp("/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/")).required().messages({
+        email: Joi.string().email({ tlds: { allow: false } }).pattern(new RegExp("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$")).required().messages({
             "string.base": "* Please type a valid email.",
             "string.empty": "* Set your email in the field below.",
             "any.required": "* Email is required."
         }),
-        password: Joi.string().trim().min(12).pattern(new RegExp("/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{12,}$/gm")).required().messages({
+        password: Joi.string().trim().min(12).pattern(new RegExp("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{12,}$")).required().messages({
             "string.min": "* The password should have at least 12 characters",
             "string.empty": "* Please type a password",
             "string.pattern.base": "* Password should contain a mix of upper and lowercase letters, numbers and simbols",
@@ -109,12 +108,12 @@ function RegistrationForm(){
             <form onSubmit={submitData} className="w-1/2 flex flex-col gap-3">
                 <legend className="font-semibold text-xl text-center">Registration</legend>
                 {fields.map((element) => (
-                    <fieldset className="flex flex-col gap-1">
+                    <fieldset className="flex flex-col gap-1" key={`${element.fieldName} + container`}>
                         <div className="flex w-full">
-                            <label htmlFor={element.fieldName} className="flex-1 text-lg font-semibold">{element.labelText}</label>
+                            <label htmlFor={element.fieldId} className="flex-1 text-lg font-semibold">{element.labelText}</label>
                             <p className="inline text-right text-lg text-red-600">{errors[element.fieldName]?.message}</p>
                         </div>
-                        <input type={element.fieldType} id={element.fieldName} {...register(element.fieldName)} placeholder={element.placeholder} className="block w-full p-2 border-2 rounded-md border-black" />
+                        <input type={element.fieldType} id={element.fieldId} {...register(element.fieldName)} placeholder={element.placeholder} className="block w-full p-2 border-2 rounded-md border-black" />
                     </fieldset>))
                 }
                 <fieldset className="flex gap-1">
