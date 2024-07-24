@@ -26,10 +26,10 @@ function RegistrationForm(){
             "string.pattern.base": "* The password should contain a mix of upper and lowercase letters, numbers and simbols",
             "any.required": "* Password is required"
         }),
-        repeatPassword: Joi.string().trim().required().valid(Joi.ref('password')).messages({
-            "string.empty": "Please re-enter your password.",
-            "any.required": "Please confirm your password.",
-            "any.only": "Passwords do not match.",
+        confirmPassword: Joi.string().trim().required().valid(Joi.ref('password')).messages({
+            "string.empty": "* Please re-enter your password.",
+            "any.required": "* Please confirm your password.",
+            "any.only": "* Passwords do not match.",
           }),
         
     })
@@ -41,58 +41,79 @@ function RegistrationForm(){
             birthDate: new Date(),
             email: "",
             password: "",
-            repeatPassword: ""
+            confirmPassword: ""
         }
     })
+
+    const fields = [
+        {
+            labelText: "First Name",
+            fieldType: "text",
+            fieldName: "firstName",
+            fieldId: "firstName",
+            placeholder: "Alexa"
+        },
+        {
+            labelText: "Last Name",
+            fieldType: "text",
+            fieldName: "lastName",
+            fieldId: "lastName",
+            placeholder: "Waller"
+        },
+        {
+            labelText: "Birth date",
+            fieldType: "date",
+            fieldName: "birthDate",
+            fieldId: "birthDate",
+            placeholder: "01/01/2000"
+        },
+        {
+            labelText: "Email",
+            fieldType: "email",
+            fieldName: "email",
+            fieldId: "email",
+            placeholder: "email@example.com"
+        },
+        {
+            labelText: "Password",
+            fieldType: "password",
+            fieldName: "password",
+            fieldId: "password",
+            placeholder: "***************"
+        },
+        {
+            labelText: "Confirm Password",
+            fieldType: "password",
+            fieldName: "confirmPassword",
+            fieldId: "confirmPassword",
+            placeholder: "***************"
+        },
+
+    ]
 
     const submitData = handleSubmit((data) => {
         console.log(data)
     })
 
+
     return(
         <section className="w-screen h-screen flex justify-center items-center">
-            <form onSubmit={submitData} className="w-1/2 flex flex-col gap-2">
-                <legend className="font-semibold text-center">Registration</legend>
-                <fieldset className="flex flex-col gap-1">
-                    <div className="flex w-full">
-                        <label htmlFor="firstName" className="flex-1 font-semibold">First name</label> <p className="inline text-right text-lg text-red-600">{errors.firstName?.message}</p>
-                    </div>
-                    <input type="text" id="firstName" {...register("firstName")} placeholder="First Name" className="block w-full p-2 border-2 rounded-md border-black" />
-                </fieldset>
-
-                <fieldset className="flex flex-col gap-1">
-                    <div className="flex w-full">
-                        <label htmlFor="lastName" className="flex-1 font-semibold">Last name</label> <p className="inline text-right text-lg text-red-600">{errors.lastName?.message}</p>
-                    </div>
-                    <input type="text" id="lastName" {...register("lastName")} placeholder="Last name" className="block w-full p-2 border-2 rounded-md border-black" />
-                </fieldset>
-                <fieldset className="flex flex-col gap-1">
-                    <div className="flex w-full">
-                        <label htmlFor="birthDate" className="flex-1 font-semibold">Birth date</label> <p className="inline text-right text-lg text-red-600">{errors.firstName?.message}</p>
-                    </div>
-                    <input type="date" id="birthDate" {...register("birthDate")} className="block w-full p-2 border-2 rounded-md border-black"/>
-                </fieldset>
-                <fieldset className="flex flex-col gap-1">
-                    <div className="flex w-full">
-                        <label htmlFor="email" className="flex-1 font-semibold">Email</label> <p className="inline text-right text-lg text-red-600">{errors.email?.message}</p>
-                    </div>
-                    <input type="email" id="email" {...register("email")} placeholder="email@example.com" className="block w-full p-2 border-2 rounded-md border-black"/>
-                </fieldset>
-                <fieldset className="flex flex-col gap-1">
-                    <div className="flex w-full">
-                        <label htmlFor="password" className="flex-1 font-semibold">Password</label> <p className="inline text-right text-lg text-red-600">{errors.password?.message}</p>
-                    </div>
-                    <input type="password" id="password" {...register("password")} placeholder="********"  className="block w-full p-2 border-2 rounded-md border-black"/>
-                </fieldset>
-                <fieldset className="flex flex-col gap-1">
-                    <div className="flex w-full">
-                        <label htmlFor="repeatPassword" className="flex-1 font-semibold">Confirm password</label> <p className="inline text-right text-lg text-red-600">{errors.repeatPassword?.message}</p>
-                    </div>
-                    <input type="password" id="repeatPassword" {...register("repeatPassword")} placeholder="********" className="block w-full p-2 border-2 rounded-md border-black" />
-                </fieldset>
+            <form onSubmit={submitData} className="w-1/2 flex flex-col gap-3">
+                <legend className="font-semibold text-xl text-center">Registration</legend>
+                {fields.map((element) => (
+                    <fieldset className="flex flex-col gap-1">
+                        <div className="flex w-full">
+                            <label htmlFor={element.fieldName} className="flex-1 font-semibold">{element.labelText}</label>
+                            <p className="inline text-right text-lg text-red-600">{errors[element.fieldName]?.message}</p>
+                        </div>
+                        <input type={element.fieldType} id={element.fieldName} {...register(element.fieldName)} placeholder={element.placeholder} className="block w-full p-2 border-2 rounded-md border-black" />
+                    </fieldset>))
+                }
                 <fieldset className="flex gap-1">
-                    <div className="flex w-full align-baseline">
-                        <input type="submit" className="p-2 rounded-sm bg-cyan-400 cursor-pointer hover:bg-cyan-300" value="Register" /> <p className="text-right flex-1">You have an account? Sign in <a href="#">here</a></p>
+                    <div className="flex w-full text-lg items-baseline">
+                        <input type="submit" className="p-2 rounded-sm bg-cyan-400 cursor-pointer hover:bg-cyan-300" value="Register" />
+                        <p className="text-right  flex-1 mr-1">You have an account? Sign in</p>
+                        <a href="#" className="font-semibold underline text-cyan-500 hover:text-purple-700"> here</a>
                     </div>
                 </fieldset>
             </form>
