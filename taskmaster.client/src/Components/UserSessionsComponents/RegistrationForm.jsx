@@ -1,19 +1,27 @@
 import Joi from 'joi';
 import { useForm } from "react-hook-form";
 import { joiResolver } from '@hookform/resolvers/joi';
+import { Link } from 'react-router-dom';
 
 function RegistrationForm(){
 
     const schema = Joi.object({
-        firstName: Joi.string().required().messages({
+        firstName: Joi.string().min(2).required().messages({
             "string.base": "* Please insert a valid name.",
+            "string.min": "* Name should have at least 2 characters",
             "string.empty": "* Please insert your name.",
             "any.required": "Name is required."
         }),
-        lastName: Joi.string().required().messages({
+        lastName: Joi.string().min(2).required().messages({
             "string.base": "* Please insert a valid lastName.",
+            "string.min": "* Last name should have at least 2 characters",
             "string.empty": "* Please insert your lastName.",
             "any.required": "LastName is required."
+        }),
+        birthDate: Joi.date().required().messages({
+            "date.empty": "* Please set your birth date",
+            "date.base": "* Set a valid date",
+            "any.required": "* Birth date is required"
         }),
         email: Joi.string().email({ tlds: { allow: false } }).pattern(new RegExp("/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/")).required().messages({
             "string.base": "* Please type a valid email.",
@@ -23,7 +31,7 @@ function RegistrationForm(){
         password: Joi.string().trim().min(12).pattern(new RegExp("/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{12,}$/gm")).required().messages({
             "string.min": "* The password should have at least 12 characters",
             "string.empty": "* Please type a password",
-            "string.pattern.base": "* The password should contain a mix of upper and lowercase letters, numbers and simbols",
+            "string.pattern.base": "* Password should contain a mix of upper and lowercase letters, numbers and simbols",
             "any.required": "* Password is required"
         }),
         confirmPassword: Joi.string().trim().required().valid(Joi.ref('password')).messages({
@@ -113,7 +121,7 @@ function RegistrationForm(){
                     <div className="flex w-full text-lg items-baseline">
                         <input type="submit" className="p-2 rounded-sm bg-cyan-400 cursor-pointer hover:bg-cyan-300" value="Register" />
                         <p className="text-right  flex-1 mr-1">You have an account? Sign in</p>
-                        <a href="#" className="font-semibold underline text-cyan-500 hover:text-purple-700"> here</a>
+                        <Link to="/login" className="font-semibold underline text-cyan-500 hover:text-purple-700">here</Link>
                     </div>
                 </fieldset>
             </form>
