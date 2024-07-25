@@ -16,7 +16,6 @@ function EmployeesCollection(){
 
     return(
         <Dashboard sectionName="Employees">
-            <CreateEmployeeButton />
             { employees ? <EmployeesTable employeesArr={employees} /> : null }
         </Dashboard>
     )
