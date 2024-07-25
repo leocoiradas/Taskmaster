@@ -1,7 +1,9 @@
 import Joi from 'joi';
 import { useForm } from "react-hook-form";
 import { joiResolver } from '@hookform/resolvers/joi';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch} from 'react-redux';
+import { createEmployee } from '../../Store/Actions/EmployeesAction';
 
 function RegistrationForm(){
     const schema = Joi.object({
@@ -98,9 +100,21 @@ function RegistrationForm(){
 
     ]
 
+    const dispatch = useDispatch();
+
     const submitData = handleSubmit((data) => {
-        console.log(data)
-    })
+        const formData = {
+            firstName: data.firstName,
+            lastName: data.lastName,
+            birthDate: data.birthDate,
+            email: data.email,
+            password: data.password,
+            role: "Employee"
+        }
+        dispatch(createEmployee(formData));
+        useNavigate("/login")
+        console.log(formData)
+    });
 
 
     return(
