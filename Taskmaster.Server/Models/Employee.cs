@@ -20,7 +20,9 @@ public partial class Employee
     public string Email { get; set; } = null!;
     [Required]
     [MinLength(12)]
-    [RegularExpression("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&-+=()])(?=\\S+$).{12}$")]
+    [RegularExpression("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{12,}$")]
+
+
     public string Password { get; set; } = null!;
     [Required]
     public string Country { get; set; } = null!;
