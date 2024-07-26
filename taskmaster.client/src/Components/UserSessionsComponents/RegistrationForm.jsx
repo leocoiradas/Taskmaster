@@ -4,6 +4,7 @@ import { joiResolver } from '@hookform/resolvers/joi';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch} from 'react-redux';
 import { createEmployee } from '../../Store/Actions/EmployeesAction';
+import { countries } from '../../assets/resources/countries';
 
 function RegistrationForm(){
     const schema = Joi.object({
@@ -40,6 +41,10 @@ function RegistrationForm(){
             "any.required": "* Please confirm your password.",
             "any.only": "* Passwords do not match.",
           }),
+        country: Joi.string().required().messages({
+            "string.base": "* Please select a valid country.",
+            "any.required" :"* Country is required."
+        })
         
     })
     const {register, handleSubmit, formState :{errors}} = useForm({
@@ -50,7 +55,8 @@ function RegistrationForm(){
             birthDate: new Date(),
             email: "",
             password: "",
-            confirmPassword: ""
+            confirmPassword: "",
+            country: ""
         }
     })
 
@@ -104,15 +110,15 @@ function RegistrationForm(){
 
     const submitData = handleSubmit((data) => {
         const formData = {
-            firstName: data.firstName,
-            lastName: data.lastName,
-            birthDate: data.birthDate,
-            email: data.email,
-            password: data.password,
-            role: "Employee"
+            FirstName: data.firstName,
+            LastName: data.lastName,
+            BirthDate: new Date(data.birthDate).toISOString().split('T')[0],
+            Email: data.email,
+            Password: data.password,
+            Country: data.country,
+            Role: "Employee"
         }
         dispatch(createEmployee(formData));
-        useNavigate("/login")
         console.log(formData)
     });
 
@@ -130,6 +136,20 @@ function RegistrationForm(){
                         <input type={element.fieldType} id={element.fieldId} {...register(element.fieldName)} placeholder={element.placeholder} className="block w-full p-2 border-2 rounded-md border-black" />
                     </fieldset>))
                 }
+                <fieldset className="flex flex-col gap-1">
+                    <div className="flex w-full">
+                        <label htmlFor="country" className="flex-1 text-lg font-semibold">Country</label>
+                        <p className="inline text-right text-lg text-red-600">{errors.country?.message}</p>
+                    </div>
+                    <select id="country" {...register("country")} className="block w-full p-2 border-2 rounded-md border-black">
+                    <option value="no country" disabled selected>Select an employee</option>
+                        {
+                            countries.map((country) => (
+                                <option value={country} key={country}>{country}</option>
+                            ))
+                        }
+                    </select>
+                </fieldset>
                 <fieldset className="flex gap-1">
                     <div className="flex w-full text-lg items-baseline">
                         <input type="submit" className="p-2 rounded-sm bg-cyan-400 cursor-pointer hover:bg-cyan-300" value="Register" />
