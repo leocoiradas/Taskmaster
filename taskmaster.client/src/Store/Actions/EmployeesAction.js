@@ -16,7 +16,7 @@ export const getEmployees = createAsyncThunk("get_employees", async () => {
 
 export const createEmployee = createAsyncThunk("create_employee", async (obj) => {
     try {
-        await axios.post("http://localhost:3000", obj);
+        await axios.post("https://localhost:5001/api/Employees/create", obj);
     } catch (error) {
         console.log(error)
     }
