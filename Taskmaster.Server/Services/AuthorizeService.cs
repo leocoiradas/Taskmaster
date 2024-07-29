@@ -15,12 +15,13 @@ namespace Taskmaster.Server.Services
         private readonly TaskmasterContext _dbcontext = dbcontext;
         private readonly IConfiguration _configuration = configuration;
 
-        private string GenerateToken(string userEmail)
+        private string GenerateToken(Employee user)
         {
             var tokenKey = _configuration.GetSection("JwtSettings").GetSection("key").ToString();
             var keyBytes = Encoding.ASCII.GetBytes(tokenKey);
             var claims = new ClaimsIdentity();
-            claims.AddClaim(new Claim(ClaimTypes.NameIdentifier, userEmail));
+            claims.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Email));
+            claims.AddClaim(new Claim(ClaimTypes.Role, user.Role ));
 
             var TokenCredential = new SigningCredentials(
                 new SymmetricSecurityKey(keyBytes),
@@ -48,7 +49,7 @@ namespace Taskmaster.Server.Services
                 {
                     return await Task.FromResult<AuthorizeResponse>(null);
                 }
-                string createdToken = GenerateToken(userFound.Email.ToString());
+                string createdToken = GenerateToken(userFound);
 
                 EmployeeDTO employeeDTO = new EmployeeDTO{
                     EmployeeId = userFound.Id,
