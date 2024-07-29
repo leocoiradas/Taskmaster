@@ -23,6 +23,7 @@ namespace Taskmaster.Server.Controllers
 
         [HttpGet]
         [Route("get")]
+        [Authorize]
         public async Task<IActionResult> GetEmployees()
         {
             /*List<Employee> Employees = await _dbcontext.Employees.OrderByDescending(e => e.EmployeeId).ToListAsync();*/
