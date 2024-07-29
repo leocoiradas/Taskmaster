@@ -6,6 +6,7 @@ using Taskmaster.Server.Models;
 using Taskmaster.Server.Models.JWTAdminClasses;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Mvc;
+using Taskmaster.Server.DTO;
 
 namespace Taskmaster.Server.Services
 {
@@ -48,7 +49,16 @@ namespace Taskmaster.Server.Services
                     return await Task.FromResult<AuthorizeResponse>(null);
                 }
                 string createdToken = GenerateToken(userFound.Email.ToString());
-                return new AuthorizeResponse() { Token = createdToken, Success = true, Message = "Token received successfully" };
+
+                EmployeeDTO employeeDTO = new EmployeeDTO{
+                    EmployeeId = userFound.Id,
+                    Name = userFound.FirstName,
+                    LastName = userFound.LastName,
+                    Email = userFound.Email,
+                    Role = userFound.Role,
+                };
+
+                return new AuthorizeResponse() { Token = createdToken, User = employeeDTO , Success = true, Message = "Token received successfully" };
             }
             catch (Exception error)
             {
