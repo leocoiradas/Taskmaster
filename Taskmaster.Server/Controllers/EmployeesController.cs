@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Taskmaster.Server.DTO;
@@ -60,6 +61,7 @@ namespace Taskmaster.Server.Controllers
 
         [HttpPut]
         [Route("update")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateEmployeeData([FromBody] Employee employeeData)
         {
             _dbcontext.Employees.Update(employeeData);
@@ -69,6 +71,7 @@ namespace Taskmaster.Server.Controllers
 
         [HttpDelete]
         [Route("delete")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             Employee employee = _dbcontext.Employees.Find(id);
