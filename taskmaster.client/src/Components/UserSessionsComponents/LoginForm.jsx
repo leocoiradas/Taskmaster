@@ -2,16 +2,19 @@ import Joi from 'joi';
 import { useForm } from "react-hook-form";
 import { joiResolver } from '@hookform/resolvers/joi';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { userLogin } from '../../Store/Actions/LoginActions';
+import { Navigate } from 'react-router-dom';
 
 function LoginForm(){
 
     const schema = Joi.object({
-        email: Joi.string().email({ tlds: { allow: false } }).pattern(new RegExp("/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/")).required().messages({
+        email: Joi.string().email({ tlds: { allow: false } }).required().messages({
             "string.base": "* Please type a valid email",
             "string.empty": "* Set your email in the field below.",
             "any.required": "* Email is required."
         }),
-        password: Joi.string().pattern(new RegExp("/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{12,}$/gm")).required().messages({
+        password: Joi.string().required().messages({
             "string.base": "Please type a valid password"
         })
     })
@@ -38,8 +41,10 @@ function LoginForm(){
         },
     ]
 
+    const dispatch = useDispatch();
+
     const submitData = handleSubmit((data) => {
-        console.log(data)
+        dispatch(userLogin(data))
     })
 
     return(
