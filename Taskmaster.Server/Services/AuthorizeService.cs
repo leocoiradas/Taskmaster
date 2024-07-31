@@ -30,6 +30,7 @@ namespace Taskmaster.Server.Services
             {
                 Subject = claims,
                 Expires = DateTime.UtcNow.AddDays(1),
+                SigningCredentials = TokenCredential
             };
 
             var TokenHandler = new JwtSecurityTokenHandler();
