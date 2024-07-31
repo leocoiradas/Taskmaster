@@ -33,7 +33,7 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddScoped<IAuthorizeService, AuthorizeService>();
 
-var tokenKey = builder.Configuration.GetValue<string>("JwtSettings:key");
+var tokenKey = builder.Configuration.GetSection("JwtSettings").GetSection("key").ToString();
 var keyBytes = Encoding.ASCII.GetBytes(tokenKey);
 
 builder.Services.AddAuthentication(config =>
