@@ -45,17 +45,20 @@ namespace Taskmaster.Server.Controllers
         [Route("create")]
         public async Task<IActionResult> CreateEmployee([FromBody] Employee employeeData)
         {
-            Employee searchEmployee = _dbcontext.Employees.FirstOrDefault(e => e.Email == employeeData.Email);
-            if (searchEmployee == null)
-            {
-                employeeData.Password = BCrypt.Net.BCrypt.HashPassword(employeeData.Password);
-                await _dbcontext.Employees.AddAsync(employeeData);
-                await _dbcontext.SaveChangesAsync();
-                return StatusCode(StatusCodes.Status200OK, "The employee was successfully created");
+            if (ModelState.IsValid) {
+
+                Employee searchEmployee = _dbcontext.Employees.FirstOrDefault(e => e.Email == employeeData.Email);
+                if (searchEmployee == null)
+                {
+                    employeeData.Password = BCrypt.Net.BCrypt.HashPassword(employeeData.Password);
+                    await _dbcontext.Employees.AddAsync(employeeData);
+                    await _dbcontext.SaveChangesAsync();
+                    return StatusCode(StatusCodes.Status200OK, "The employee was successfully created");
+                }
+                return StatusCode(StatusCodes.Status400BadRequest);
             }
             else
             {
-                //ViewData["Error"] = "There's already an employee with the email provided in the database";
                 return StatusCode(StatusCodes.Status400BadRequest, "There's already an employee with the email provided in the database");
             }
         }
@@ -65,9 +68,13 @@ namespace Taskmaster.Server.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateEmployeeData([FromBody] Employee employeeData)
         {
-            _dbcontext.Employees.Update(employeeData);
-            await _dbcontext.SaveChangesAsync();
-            return StatusCode(StatusCodes.Status200OK);
+            if (ModelState.IsValid)
+            {
+                _dbcontext.Employees.Update(employeeData);
+                await _dbcontext.SaveChangesAsync();
+                return StatusCode(StatusCodes.Status200OK);
+            }
+            return StatusCode(StatusCodes.Status400BadRequest);
         }
 
         [HttpDelete]
