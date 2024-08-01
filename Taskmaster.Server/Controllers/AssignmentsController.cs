@@ -58,11 +58,15 @@ namespace Taskmaster.Server.Controllers
         {
             try
             {
-                NewAssignmentData.Id = Guid.NewGuid();
-                //NewAssignmentData.DueAt = DateOnly.Parse(NewAssignmentData.DueAt, "yyyy-MM-dd");
-                _dbcontext.Assignments.Add(NewAssignmentData);
-                await _dbcontext.SaveChangesAsync();
-                return StatusCode(StatusCodes.Status200OK, NewAssignmentData);
+                if (ModelState.IsValid)
+                {
+                    NewAssignmentData.Id = Guid.NewGuid();
+                    //NewAssignmentData.DueAt = DateOnly.Parse(NewAssignmentData.DueAt, "yyyy-MM-dd");
+                    _dbcontext.Assignments.Add(NewAssignmentData);
+                    await _dbcontext.SaveChangesAsync();
+                    return StatusCode(StatusCodes.Status200OK, NewAssignmentData);
+                }
+                return StatusCode(StatusCodes.Status400BadRequest);
             }
             catch (Exception error)
             {
@@ -94,13 +98,14 @@ namespace Taskmaster.Server.Controllers
         {
             try
             {
+                if (ModelState.IsValid)
+                {
+                    _dbcontext.Assignments.Update(assignmentData);
+                    await _dbcontext.SaveChangesAsync();
+                    return StatusCode(StatusCodes.Status200OK, assignmentData);
+                }
 
-
-                _dbcontext.Assignments.Update(assignmentData);
-                await _dbcontext.SaveChangesAsync();
-                return StatusCode(StatusCodes.Status200OK, assignmentData);
-
-
+                return StatusCode(StatusCodes.Status400BadRequest);
 
             }
             catch (Exception error)
