@@ -1,8 +1,8 @@
 import { createReducer } from "@reduxjs/toolkit";
 import { getEmployees, createEmployee, editEmployee } from "../Actions/EmployeesAction";
 
-const initialState = {
-    assignments: []
+let initialState = {
+    employees: []
 }
 
 export const employeesReducer = createReducer(initialState, (builder) => builder
@@ -14,3 +14,4 @@ export const employeesReducer = createReducer(initialState, (builder) => builder
     })
     
 )
+

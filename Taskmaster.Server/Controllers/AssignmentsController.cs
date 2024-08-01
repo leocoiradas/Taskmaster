@@ -24,23 +24,23 @@ namespace Taskmaster.Server.Controllers
             try
             {
                 var assignments = await _dbcontext.Assignments
-                    .Include(e => e.EmployeeAssignedNavigation) 
+                    .Include(e => e.Employee)
                     .OrderByDescending(e => e.CreatedAt)
-                    .Select(assignment => new 
+                    .Select(assignment => new
                     {
-                        AssignmentId = assignment.AssignmentId,
-                        EmployeeAssigned = assignment.EmployeeAssigned,
+                        AssignmentId = assignment.Id,
+                        EmployeeId = assignment.EmployeeId,
                         Title = assignment.Title,
                         Description = assignment.Description,
                         Status = assignment.Status,
                         CreatedAt = assignment.CreatedAt,
                         DueAt = assignment.DueAt,
-                        Employee = assignment.EmployeeAssignedNavigation != null ? new // Check for null employee
+                        Employee = assignment.EmployeeId != null ? new
                         {
-                            Name = assignment.EmployeeAssignedNavigation.Name,
-                            LastName = assignment.EmployeeAssignedNavigation.LastName
-                            // Assuming Surname exists in your Employee class
-                        } : null // Return null if employee is null
+                            Name = assignment.Employee.FirstName,
+                            LastName = assignment.Employee.LastName
+                            
+                        } : null 
                     })
                     .ToListAsync();
 
@@ -54,26 +54,19 @@ namespace Taskmaster.Server.Controllers
 
         [HttpPost]
         [Route("create")]
-        public async Task <IActionResult> CreateAssignment([FromBody]Assignment NewAssignmentData)
+        public async Task<IActionResult> CreateAssignment([FromBody] Assignment NewAssignmentData)
         {
             try
             {
-
-                Assignment existantAssignment = _dbcontext.Assignments.FirstOrDefault(element => element.Title == NewAssignmentData.Title);
-
-                if (existantAssignment == null)
+                if (ModelState.IsValid)
                 {
-
-                    NewAssignmentData.AssignmentId = Guid.NewGuid();
+                    NewAssignmentData.Id = Guid.NewGuid();
                     //NewAssignmentData.DueAt = DateOnly.Parse(NewAssignmentData.DueAt, "yyyy-MM-dd");
                     _dbcontext.Assignments.Add(NewAssignmentData);
                     await _dbcontext.SaveChangesAsync();
                     return StatusCode(StatusCodes.Status200OK, NewAssignmentData);
                 }
-                else 
-                {
-                    return StatusCode(StatusCodes.Status409Conflict, "An element with the same caracteristics is already in the database");
-                }
+                return StatusCode(StatusCodes.Status400BadRequest);
             }
             catch (Exception error)
             {
@@ -101,17 +94,18 @@ namespace Taskmaster.Server.Controllers
 
         [HttpPut]
         [Route("update")]
-        public async Task <IActionResult> UpdateAssignment([FromBody] Assignment assignmentData)
+        public async Task<IActionResult> UpdateAssignment([FromBody] Assignment assignmentData)
         {
             try
             {
-                
-              
-                _dbcontext.Assignments.Update(assignmentData);
-                await _dbcontext.SaveChangesAsync();
-                return StatusCode(StatusCodes.Status200OK, assignmentData);
+                if (ModelState.IsValid)
+                {
+                    _dbcontext.Assignments.Update(assignmentData);
+                    await _dbcontext.SaveChangesAsync();
+                    return StatusCode(StatusCodes.Status200OK, assignmentData);
+                }
 
-
+                return StatusCode(StatusCodes.Status400BadRequest);
 
             }
             catch (Exception error)

@@ -12,7 +12,6 @@ function AssignmentCollection(){
         dispatch(getAssignments());
     },[])
     const assignments = useSelector((store) => store.assignmentsCollection.assignments);
-    console.log(assignments)
     
 
     return (

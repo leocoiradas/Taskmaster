@@ -1,10 +1,19 @@
 import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import Cookies from "js-cookie";
 
+const token = Cookies.get("token"); 
+
+export const instance = axios.create({
+    baseURL: 'https://localhost:5001', 
+    headers: {
+        Authorization: `Bearer ${token}`
+    }
+});
+console.log(token)
 export const getEmployees = createAsyncThunk("get_employees", async () => {
     try {
-        const response = await axios.get("https://localhost:5001/api/Employees/get");
-        console.log(response)
+        const response = await instance.get("/api/Employees/get");
         return {
             employees: response.data
         };
@@ -16,7 +25,7 @@ export const getEmployees = createAsyncThunk("get_employees", async () => {
 
 export const createEmployee = createAsyncThunk("create_employee", async (obj) => {
     try {
-        await axios.post("http://localhost:3000", obj);
+        await axios.post("https://localhost:5001/api/Employees/create", obj);
     } catch (error) {
         console.log(error)
     }

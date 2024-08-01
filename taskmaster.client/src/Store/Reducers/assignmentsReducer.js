@@ -1,7 +1,7 @@
 import { createReducer } from "@reduxjs/toolkit";
 import { getAssignments, getAssignmentsByEmployee } from "../Actions/AssignmentsActions"
 
-const initialState = {
+let initialState = {
     assignments: []
 }
 

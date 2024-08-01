@@ -1,10 +1,20 @@
 import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import Cookies from "js-cookie";
 
+
+const token = Cookies.get("token");
+
+export const instance = axios.create({
+    baseURL: 'https://localhost:5001',
+    headers: {
+        Authorization: `Bearer ${token}`
+    }
+});
 
 export const createAssignment = createAsyncThunk("create_assignment", async (newAssignment) => {
     try {
-        await axios.post("https://localhost:5001/api/Assignments/create", newAssignment);
+        await instance.post("/api/Assignments/create", newAssignment);
     } catch (error) {
         console.log(error)
     }
@@ -12,8 +22,7 @@ export const createAssignment = createAsyncThunk("create_assignment", async (new
 
 export const getAssignments = createAsyncThunk("get_assignments", async () => {
     try {
-        const response = await axios.get("https://localhost:5001/api/Assignments/assignments");
-        //console.log(response.data)
+        const response = await instance.get("/api/Assignments/assignments");
         return {
             assignmentsCollection: response.data
         }
@@ -25,7 +34,7 @@ export const getAssignments = createAsyncThunk("get_assignments", async () => {
 
 export const getAssignmentsByEmployee = createAsyncThunk("get_assignments_by_employee", async (assignmentID) => {
     try {
-        const response = await axios.get(`http://localhost:3000/${assignmentID}`);
+        const response = await instance.get(`http://localhost:3000/${assignmentID}`);
         return {
             assignmentsByEmployee: response.data
         }
@@ -36,7 +45,8 @@ export const getAssignmentsByEmployee = createAsyncThunk("get_assignments_by_emp
 
 export const editAssignment = createAsyncThunk("edit_assignment", async (assignmentData) => {
     try {
-        await axios.put("https://localhost:5001/api/Assignments/update", assignmentData);
+        await instance.put("/api/Assignments/update", assignmentData);
+        return window.location.reload()
     } catch (error) {
         console.log(error);
     }
@@ -44,7 +54,7 @@ export const editAssignment = createAsyncThunk("edit_assignment", async (assignm
 
 export const deleteAssignment = createAsyncThunk("delete_assignment", async (assignmentID) => {
     try {
-        await axios.delete(`https://localhost:5001/Assignments/delete/${assignmentID}`, {
+        await instance.delete(`/Assignments/delete/${assignmentID}`, {
             data: { assignmentID },
           });
     } catch (error) {
